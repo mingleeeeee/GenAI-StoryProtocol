@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ちいかわ Image Gen</title>
+    <link rel="stylesheet" href="css/mask.css">
+    <link rel="stylesheet" href="css/story-protocol.css">
+    <script src="https://unpkg.com/konva@8.0.2/konva.min.js"></script>
+</head>
+<body>
+    <div class="container" style="margin-top: 100px;">
+        <h1>ちいかわ</h1>
+    </div>
+    <div class="container" style="margin-top: 20px;"> 
+        <div id="imageContainer">
+            <img src="image/chiikawa_rgba.png" id="sourceImage" alt="Image">
+            <canvas id="canvasMask" width="248" height="248"></canvas>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 20px;">
+        <button onclick="confirmMask()">Confirm Mask Selection</button>      
+    </div>
+    <div class="container" style="text-align: center;">
+        <h4>Left-click three times on the canvas and drag to start creating a mask.<br>Use mouse wheel to change the circle size.<br>Confirm the mask selection and type in prompt to generate a new image.<br>Enjoy creating pics!</h4>
+    </div>
+    <div class="container" style="margin-top: 30px;">
+        <textarea id="textBox" placeholder="Enter text here..."></textarea>
+    </div>
+    <div class="container" style="margin-top: 10px;">
+        <button id="generateButton">Generate</button>
+    </div>
+      
+    <!-- Story Protocol area -->
+    <div class="chatbot-container" id="chatbotContainer">
+        
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <h2>Story Protocol</h2>        
+        </div>
+
+        <div class="container">
+            <button class="metamask-button" id="connectButton">
+              <img src="image/metamask.png "  alt="metamask logo" /> Connect wallet
+              <span id="loading"><span>&bull;</span><span>&bull;</span><span>&bull;</span></span></button>
+            <div id="walletID">Your wallet is not connected yet.</div>
+            <div id="mobileDeviceWarning">If you are on a mobile phone, please use MetaMask application's browser to connect.</div>
+          </div>
+          <div class="alert" id="installAlert">Please refresh your browser after installing the Metamask plugin<button class="button" id="">Reload page</button></div>
+       
+        <div id="chatMessages">
+            <p>1. Save your picture by right clicking the picture <br>
+                2. <a target="_blank" href="https://testnets.opensea.io/studio/mint?ref=nav">Mint an NFT</a><br>
+                3. Register an IP asset <br>
+            </p>
+            
+        </div>
+        <button class="story-button" id="IPA-button"  style="visibility: hidden;">
+            <img src="image/story.jpeg" width="30px" height="30px" alt="metamask logo" /> Register an IP asset</button>
+    </div>
+
+    <script>
+        function toggleChatbot() {
+            var chatbotContainer = document.getElementById('chatbotContainer');
+            if (chatbotContainer.style.height === '400px') {
+                chatbotContainer.style.height = '50px'; // Toggle to collapsed state
+            } else {
+                chatbotContainer.style.height = '400px'; // Toggle to expanded state
+            }
+        }
+       
+    </script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="js/metamask.js"></script>
+    <script src="js/mask.js"></script>
+    <script>
+        // Asynchronously set session on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/setSession', { method: 'POST' });
+                if (response.ok) {
+                    console.log('Session variable set successfully.');
+                } else {
+                    console.error('Failed to set session variable.');
+                }
+            } catch (error) {
+                console.error('Error setting session variable:', error);
+            }
+        });
+    </script>
+</body>
+</html>

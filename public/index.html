@@ -6,7 +6,11 @@
     <title>ちいかわ Image Gen</title>
     <link rel="stylesheet" href="css/mask.css">
     <link rel="stylesheet" href="css/story-protocol.css">
+    <link rel="stylesheet" href="css/IPregister.css">
     <script src="https://unpkg.com/konva@8.0.2/konva.min.js"></script>
+    
+     <!-- Include Axios from CDN -->
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <div class="container" style="margin-top: 100px;">
@@ -18,7 +22,10 @@
             <canvas id="canvasMask" width="248" height="248"></canvas>
         </div>
     </div>
-    <div class="container" style="margin-top: 20px;">
+    <div class="container" style="margin-top: 10px;">
+        <div id="imageUrlContainer"><!-- Image URL will be displayed here --></div>
+    </div>
+    <div class="container" style="margin-top: 10px;">
         <button onclick="confirmMask()">Confirm Mask Selection</button>      
     </div>
     <div class="container" style="text-align: center;">
@@ -48,15 +55,37 @@
           <div class="alert" id="installAlert">Please refresh your browser after installing the Metamask plugin<button class="button" id="">Reload page</button></div>
        
         <div id="chatMessages">
-            <p>1. Save your picture by right clicking the picture <br>
-                2. <a target="_blank" href="https://testnets.opensea.io/studio/mint?ref=nav">Mint an NFT</a><br>
-                3. Register an IP asset <br>
+            <p>1. Copy the image url <br>
+                2. <a target="_blank" href="https://sepolia.etherscan.io/address/0x7ee32b8B515dEE0Ba2F25f612A04a731eEc24F49#writeContract">Mint an NFT</a>(select 4)<br>
+                3. Sign in with metamask, enter your wallet address and image url<br>
+                4. Come back and register an IP asset <br>
             </p>
             
         </div>
         <button class="story-button" id="IPA-button"  style="visibility: hidden;">
             <img src="image/story.jpeg" width="30px" height="30px" alt="metamask logo" /> Register an IP asset</button>
     </div>
+    
+        <!-- Modal overlay container -->
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal-content">
+            <span class="close" id="modalClose">&times;</span> <!-- Close button (x) -->
+            <div class="modal-header">
+                <h2>Register IP Asset</h2>
+            </div>
+            <div class="modal-form">
+                <label for="IPid">IP Asset ID:</label>
+                <input type="text" id="IPid" value="0x11aF788cc340b0Ae6aB18703e36DcaA7294aF340" readonly class="modal-input" style="width: 480px;">
+            </div>
+            <div class="modal-form">
+                <label for="Tokenid">NFT Token ID:</label>
+                <input type="text" id="Tokenid" class="modal-input" style="width: 480px;">
+            </div>
+            <button onclick="createIPAsset()" class="modal-button">Create</button>
+            </div>
+        </div>
+  
+  
 
     <script>
         function toggleChatbot() {
@@ -72,20 +101,25 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="js/metamask.js"></script>
     <script src="js/mask.js"></script>
+    <script src="js/IPregister.js"></script>
+    <script charset="utf-8"src="https://cdn.ethers.io/scripts/ethers-v4.min.js" type="text/javascript">
+</script>
     <script>
         // Asynchronously set session on page load
         window.addEventListener('load', async () => {
             try {
                 const response = await fetch('/setSession', { method: 'POST' });
                 if (response.ok) {
-                    console.log('Session variable set successfully.');
+                    console.log('Session variable reset successfully.');
                 } else {
-                    console.error('Failed to set session variable.');
+                    console.error('Failed to reset session variable.');
                 }
             } catch (error) {
                 console.error('Error setting session variable:', error);
             }
         });
-    </script>
+
+
+     </script>
 </body>
 </html>

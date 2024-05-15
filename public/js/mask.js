@@ -152,7 +152,9 @@ async function generateImage() {
             const responseData = await response.json();
 
             // Update the sourceImage src attribute with the new image URL
-            sourceImage.src = responseData.img_filename;
+            sourceImage.src = responseData.gen_image_url;
+            // Display the generated image URL
+            displayImageUrl(`https://ming-ip-asset.s3.us-east-2.amazonaws.com/${responseData.gen_image_filename}`); 
         } else {
             // Handle API error response
             const errorResponse = await response.json();
@@ -175,7 +177,15 @@ async function generateImage() {
         generateButton.textContent = 'Generate';
     }
 }
+// Function to display image URL
+function displayImageUrl(s3_gen_image_url) {
+    const imageUrlContainer = document.getElementById('imageUrlContainer');
+    imageUrlContainer.textContent = ''; // Clear previous content
 
+    const imageUrlElement = document.createElement('p');
+    imageUrlElement.textContent = s3_gen_image_url;
+    imageUrlContainer.appendChild(imageUrlElement);
+}
 // Event listener for the Generate button
 document.getElementById('generateButton').addEventListener('click', generateImage);
 

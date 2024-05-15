@@ -36,14 +36,19 @@ const isMobile = () => {
 connectButton.addEventListener("click", () => {
   if (typeof window.ethereum !== "undefined") {
     startLoading();
-
+    
     ethereum
       .request({ method: "eth_requestAccounts" })
       .then((accounts) => {
+        console.log('account info')
+        console.log(window.ethereum)
         const account = accounts[0];
-
+        // Display wallet ID
         walletID.innerHTML = `Wallet connected: <span>${account}</span>`;
         IPA_button.style.visibility = 'visible';
+        // Send wallet address to Node.js server
+        //console.log(`address:${account}`)
+        sendWalletAddressToServer(account);
         stopLoading();
       })
       .catch((error) => {
@@ -62,6 +67,24 @@ connectButton.addEventListener("click", () => {
   }
 });
 
-// reloadButton.addEventListener("click", () => {
-//   window.location.reload();
-// });
+async function sendWalletAddressToServer(walletAddress) {
+  try {
+      const response = await fetch('http://localhost:5000/saveWalletAddress', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ address: walletAddress })
+      });
+
+      if (response.ok) {
+          const responseData = await response.json();
+          console.log('Server response:', responseData);
+      } else {
+          console.error('Server error:', response.statusText);
+      }
+  } catch (error) {
+      console.error('Network error:', error);
+  }
+}
+

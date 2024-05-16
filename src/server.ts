@@ -11,6 +11,8 @@ import config from './config';
 import { StoryClient, StoryConfig } from '@story-protocol/core-sdk'
 import { Address, http,ContractFunctionExecutionError} from 'viem'
 import { S3 } from 'aws-sdk';
+import { Account, privateKeyToAccount} from 'viem/accounts';
+import { ethers } from 'ethers';
 
 const app = express();
 const port = 5000;
@@ -146,25 +148,45 @@ app.listen(port, () => {
 });
 
 // Example POST endpoint to receive data
-app.post('/saveWalletAddress', (req: Request, res: Response) => {
-    const {address} = req.body;
-    if (!address) {
-        return res.status(400).json({ error: 'Wallet address is missing in the request body.' });
-    }
-    console.log('Received wallet address:', address);
-    accountAddress=address
-    // Process the received data (e.g., save to database, perform actions, etc.)
-    // Respond with a success message or data
-    res.status(200).json({ message: 'Address received successfully.', receivedValue: address });
-});
+// app.post('/saveWalletAddress', (req: Request, res: Response) => {
+//     const {address} = req.body;
+//     if (!address) {
+//         return res.status(400).json({ error: 'Wallet address is missing in the request body.' });
+//     }
+//     console.log('Received wallet address:', address);
+//     accountAddress=address
+//     // Process the received data (e.g., save to database, perform actions, etc.)
+//     // Respond with a success message or data
+//     res.status(200).json({ message: 'Address received successfully.', receivedValue: address });
+// });
+
+// app.post('/verify', async (req: Request, res: Response) => {
+//   const { account, message, signature } = req.body;
+// console.log(req.body)
+//   // Verify the signature
+//   const recoveredAddress = ethers.verifyMessage(message, signature);
+//   if (recoveredAddress.toLowerCase() === account.toLowerCase()) {
+//     // Proceed with other logic using the recovered account
+//     accountAddress = recoveredAddress as Address
+//     console.log(`address: ${accountAddress}`)
+//     // Perform any operations with StoryClient
+//     res.json({ success: true, message: 'Signature verified and StoryClient initialized'});
+//   } else {
+//     res.status(400).json({ success: false, message: 'Invalid signature' });
+//   }
+// });
 
 app.post('/registerIP', async (req: Request, res: Response) => {
   try {
-    if(accountAddress){
+    console.log('Give up using account from provider. Try to use private key now.')
+    const privateKey: Address = `0x${process.env.WALLET_PRIVATE_KEY}`;
+    const account: Account = privateKeyToAccount(privateKey);
+
+    if(account){
     const { IPid, derivativeTokenId } = req.body;
     const config: StoryConfig = {
       transport: http(RPCProviderUrl),
-      account: accountAddress, // the account address from above
+      account: account, // the account address from above
       chainId: 'sepolia'
     };
       console.log(`Start to mint liscense at account address: ${config.account}`);

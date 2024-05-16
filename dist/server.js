@@ -124,10 +124,10 @@ app.post('/recreateImage', (req, res) => __awaiter(void 0, void 0, void 0, funct
 }));
 app.post('/setSession', (req, res) => {
     req.session.ori_image = 'public/image/chiikawa_rgba.png';
-    console.log('set origin');
+    console.log('Reset root image');
     if (req.session.mask_image) {
         delete req.session.mask_image;
-        console.log('mask cleared');
+        console.log('Mask image cleared');
     }
     res.sendStatus(200);
 });

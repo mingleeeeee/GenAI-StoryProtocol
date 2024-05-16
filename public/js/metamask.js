@@ -48,7 +48,7 @@ connectButton.addEventListener("click", () => {
         IPA_button.style.visibility = 'visible';
         // Send wallet address to Node.js server
         //console.log(`address:${account}`)
-        sendWalletAddressToServer(account);
+        //sendWalletAddressToServer(account);
         stopLoading();
       })
       .catch((error) => {
@@ -67,24 +67,24 @@ connectButton.addEventListener("click", () => {
   }
 });
 
-async function sendWalletAddressToServer(walletAddress) {
-  try {
-      const response = await fetch('http://localhost:5000/saveWalletAddress', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ address: walletAddress })
-      });
+// async function sendWalletAddressToServer(walletAddress) {
+//   try {
+//       const response = await fetch('http://localhost:5000/saveWalletAddress', {
+//           method: 'POST',
+//           headers: {
+//               'Content-Type': 'application/json'
+//           },
+//           body: JSON.stringify({ address: walletAddress })
+//       });
 
-      if (response.ok) {
-          const responseData = await response.json();
-          console.log('Server response:', responseData);
-      } else {
-          console.error('Server error:', response.statusText);
-      }
-  } catch (error) {
-      console.error('Network error:', error);
-  }
-}
+//       if (response.ok) {
+//           const responseData = await response.json();
+//           console.log('Server response:', responseData);
+//       } else {
+//           console.error('Server error:', response.statusText);
+//       }
+//   } catch (error) {
+//       console.error('Network error:', error);
+//   }
+// }
 
